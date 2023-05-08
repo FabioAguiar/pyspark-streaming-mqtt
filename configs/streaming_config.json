@@ -1,0 +1,7 @@
+{
+    "broker_url": "",
+    "topic": "",
+    "username" : "",
+    "password" : "",
+    "parquet_dir" : ""
+}
