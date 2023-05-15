@@ -1,4 +1,1 @@
 configs/streaming_config.json
-data/streaming_output.parquet/
-checkpoint/
-.ipynb_checkpoints/
