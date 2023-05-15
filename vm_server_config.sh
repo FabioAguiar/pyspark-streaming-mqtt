@@ -36,9 +36,7 @@ echo "" >> $HOME/.bashrc
 echo "export SPARK_HOME=/opt/spark" >> $HOME/.bashrc
 echo "export PATH=\$PATH:\$SPARK_HOME/bin:\$SPARK_HOME/sbin" >> $HOME/.bashrc
 #Carregar configurações
-cd $HOME
-pwd
-source ~/.bashrc
+source $HOME/.bashrc
 
 #Pip e bibliotecas python necessárias
 apt install python3-pip -y
@@ -54,9 +52,8 @@ pip install scipy
 
 #Configurando o diretório do projeto e clonando repositório
 apt install git
-cd $HOME
-mkdir projects
-cd projects
+mkdir $HOME/projects
+cd $HOME/projects
 git clone https://github.com/FabioAguiar/pyspark-streaming-mqtt.git
 
 reboot

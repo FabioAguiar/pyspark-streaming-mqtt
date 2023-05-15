@@ -6,7 +6,7 @@ streaming_mqtt.py
     --files $HOME/projects/pyspark-streaming-mqtt/configs/streaming_config.json \
     --jars external/mqtt-assembly/target/spark-streaming-mqtt-assembly_*.jar \
     --packages org.apache.bahir:spark-streaming-mqtt_2.11:2.4.0 \
-    $HOME/projects/pyspark-streaming-mqtt/streaming_service/streaming_mqtt.py
+    $HOME/projects/pyspark-streaming-mqtt/streaming_service/streaming_mqtt.py    
 
   $SPARK_HOME/bin/spark-submit --master local[*] --files $HOME/projects/pyspark-streaming-mqtt/configs/streaming_config.json --jars external/mqtt-assembly/target/spark-streaming-mqtt-assembly_*.jar --packages org.apache.bahir:spark-streaming-mqtt_2.11:2.4.0 $HOME/projects/pyspark-streaming-mqtt/streaming_service/streaming_mqtt.py
 
@@ -14,6 +14,7 @@ streaming_mqtt.py
 
 from os import listdir, path
 import json
+import datetime
 
 from pyspark import SparkContext, SparkFiles
 from pyspark.streaming import StreamingContext
@@ -42,37 +43,40 @@ else:
     print('no config file found')
     config = None
 
-# Informações do broker URI no arquivo config.json
+# Identificador Uniforme de Recurso (URI) do Broker obtidas no arquivo config.json
 brokerUrl = config['broker_url']
 topic = config['topic']
 username = config['username']
 password = config['password']
 
-mqttStream = MQTTUtils.createStream(ssc, brokerUrl, topic, username=None, password=None)
-
+# Cria fluxo de entrada que recebe mensagens enviadas por um publisher MQTT
+mqttStream = MQTTUtils.createStream(ssc, brokerUrl, topic, username, password)
 
 # cria tupla com um único elemento
-df = mqttStream.map(lambda x: (x,))
+df_tuple = mqttStream.map(lambda x: (x,))
 
 # Função para converter os dados RDD em Parquet 
-def processar_rdd(rdd):
+def process_rdd(rdd):
     if not rdd.isEmpty():
         data = rdd.collect()
         print(tuple(data[0])[0])
         print(type(tuple(data[0])[0]))
 
-        # extrair a dict        
+        # Extrair dict da mensagem        
         dict_data = tuple(data[0])[0]
-        # converter para o Pandas DataFrame
-        df_pandas = pd.DataFrame(eval(dict_data), index=[0])
-        # converter para o PySpark Pandas
-        df_pyspark = pspd.DataFrame(df_pandas)
-        print(df_pyspark)
-        # converter e salvar em Parquet        
-        df_pyspark.to_parquet(config['parquet_dir'], mode='append')
+        # Converter para Pandas DataFrame
+        df_pd = pd.DataFrame(eval(dict_data), index=[0])
+        # Converter para PySpark Pandas DataFrame
+        df_pspd = pspd.DataFrame(df_pd)
+        print(df_pspd)
+        # Concatenação da data atual com o diretório de saída de dados
+        current_date = datetime.date.today()
+        dir = config['parquet_dir']+str(current_date)+'/streaming_output.parquet'
+        # Converter e salvar em Parquet
+        df_pspd.to_parquet(dir, mode='append')
 
 # Processar cada RDD individualmente
-df.foreachRDD(processar_rdd)
+df_tuple.foreachRDD(process_rdd)
 
 ssc.start()
 ssc.awaitTermination()
