@@ -1,1 +1,3 @@
 configs/streaming_config.json
+checkpoint/
+.ipynb_checkpoints/

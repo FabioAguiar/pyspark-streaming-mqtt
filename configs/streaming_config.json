@@ -1,7 +1,7 @@
 {
-    "broker_url": "tcp://192.168.0.104:8883",
-    "topic": "Home/ESP8266/JSON/#",
-    "username" : "storage_service",
-    "password" : "iot123",
-    "parquet_dir" : "/home/fabyuu/projects/pyspark-streaming-mqtt/data/"
+    "broker_url": "",
+    "topic": "",
+    "username" : "",
+    "password" : "",
+    "parquet_dir" : ""
 }
