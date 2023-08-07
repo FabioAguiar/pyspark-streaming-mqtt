@@ -17,7 +17,7 @@ To run the streaming service on a virtual server having the same settings for wh
 ## IoT Devices
 The device projects that communicate with this streaming service can be found at https://github.com/FabioAguiar/iot-projects
 
-##Dataframe view
+## Dataframe view
 This project also features a notebook file to demonstrate how records can be viewed in a dataframe.
 
 ## Credits
