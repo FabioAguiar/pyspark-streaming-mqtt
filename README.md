@@ -17,5 +17,8 @@ To run the streaming service on a virtual server having the same settings for wh
 ## IoT Devices
 The device projects that communicate with this streaming service can be found at https://github.com/FabioAguiar/iot-projects
 
+##Dataframe view
+This project also features a notebook file to demonstrate how records can be viewed in a dataframe.
+
 ## Credits
 This project uses the `mqtt.py` file, which provides an MQTT Spark Streaming Connector, from the  [Apache Bahir project](https://github.com/apache/bahir), under the Apache License 2.0. Thanks to the Apache Bahir project team for the provided code.
